@@ -15,26 +15,24 @@ const (
 )
 
 type crawler struct {
-	reqForm map[string]string
-	//	modProxy bool
+	reqForm  map[string]string
+	modProxy bool
+	proxyUrl string
 }
 
-type Crawler interface {
-	InitForm()
-	GetForm() map[string]string
+func copyForm(f map[string]string) map[string]string {
+	m := make(map[string]string)
+	for k, v := range f {
+		m[k] = v
+	}
+	return m
 }
 
-func NewCrawler() Crawler {
-	var c crawler
-	c.InitForm()
-	return &c
-}
-
-func (c *crawler) GetForm() map[string]string {
+func (c *crawler) getForm() map[string]string {
 	return copyForm(c.reqForm)
 }
 
-func (c *crawler) InitForm() {
+func (c *crawler) initForm() {
 	randstr := func(n int, bytelst string) string {
 		r := rand.New(rand.NewSource(time.Now().UnixNano()))
 		str := make([]byte, 0, n)
@@ -68,14 +66,6 @@ func (c *crawler) InitForm() {
 		"stTime":          rd(3),
 		"stTimesNum":      "0",
 	}
-}
-
-func copyForm(f map[string]string) map[string]string {
-	m := make(map[string]string)
-	for k, v := range f {
-		m[k] = v
-	}
-	return m
 }
 
 func newTimestamp() string {
